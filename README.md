@@ -109,6 +109,8 @@ TODO
 
 ## Log
 
-| Date | Description |
-|:----:|-------------|
-|      |             |
+|   Date   | Description                                                                                  |
+|:--------:|----------------------------------------------------------------------------------------------|
+| 11/12/20 | Created repo. Initial setup                                                                  |
+| 11/20/20 | Got both API's working and retrieving data                                                   |
+| 11/21/20 | Created interfaces for easily working with APIs. Created search and list all functionalities |
