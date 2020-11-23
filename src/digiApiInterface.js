@@ -1,4 +1,4 @@
-const baseUrl = "src/php/digi-sleuth-proxy.php";
+const baseUrl = "https://people.rit.edu/crl3554/330/project3/src/php/digi-sleuth-proxy.php";
 
 // Returns in-game info for digimon
 async function search(name) {
@@ -35,7 +35,7 @@ async function getSkill(id) {
 }
 
 // Gets back all digimon filtered by the parameters
-async function list(stage = null, type = null, attribute = null) {
+async function list(amount, offset, stage = null, type = null, attribute = null) {
     let url = baseUrl + "?action=list";
 
     if (stage)
@@ -65,6 +65,16 @@ async function list(stage = null, type = null, attribute = null) {
                 filteredArr = filteredArr.filter(digimon => digimon.attribute == attribute);
 
             return filteredArr;
+        })
+        // Get only the amount desired
+        .then(filteredArr => {
+            // Don't go over the size of the array
+            amount = (offset + amount) > filteredArr.length ? filteredArr.length - offset : amount;
+
+            return {
+                arr: filteredArr.slice(offset, offset + amount),
+                total: filteredArr.length
+            };
         });
 }
 

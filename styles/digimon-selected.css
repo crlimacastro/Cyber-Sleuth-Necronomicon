@@ -1,0 +1,70 @@
+/* * {
+    border: 1px solid black;
+} */
+
+#digimon-selected-display {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-around;
+}
+
+#digimon-selected-header {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+#digimon-selected-name {
+    text-align: center;
+}
+
+#digimon-selected-stage {
+    text-align: center;
+}
+
+#digimon-selected-image-container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+}
+
+#digimon-selected-image {
+    display: block;
+    width: 22rem;
+}
+
+#digimon-selected-info {
+    display: flex;
+    flex-flow: column;
+}
+
+
+/* #digimon-table {} */
+
+#digimon-selected-abtract {
+    max-width: 26rem;
+}
+
+
+/* #digimon-selected-wiki-link {} */
+
+
+/* #digimon-selected-arrays {} */
+
+#digimon-selected-degenerations .digimon-card {
+    max-width: 8rem;
+}
+
+#digimon-selected-degenerations .digimon-card h4 {
+    font-size: 1rem;
+    white-space: nowrap;
+}
+
+#digimon-selected-digivolutions .digimon-card {
+    max-width: 8rem;
+}
+
+#digimon-selected-digivolutions .digimon-card h4 {
+    font-size: 1rem;
+    white-space: nowrap;
+}

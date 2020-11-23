@@ -1,4 +1,4 @@
-const baseUrl = "src/php/mediawiki-proxy.php";
+const baseUrl = "https://people.rit.edu/crl3554/330/project3/src/php/mediawiki-proxy.php";
 
 // Returns image for digimon
 async function getImageURL(name) {
@@ -10,10 +10,21 @@ async function getImageURL(name) {
             if (!response.ok)
                 throw Error(response.statusText);
 
-            return response.json();
+            return response.text();
+        })
+        // Process text to json
+        .then(text => {
+            try {
+                let json = JSON.parse(text);
+                return json;
+            } catch (e) {
+                return null;
+            }
         })
         // Find the article's main image
         .then(json => {
+            if (!json) return null;
+
             // Get the correct title of the article
             let title = name;
             if (json.query.normalized)
@@ -23,12 +34,12 @@ async function getImageURL(name) {
             let firstPage = getFirstPage(json);
             let images = firstPage.images;
 
-            let test = images.find(img => img.title == `File:${title} b.jpg`);
-
-            return images.find(img => img.title == `File:${title} b.jpg`).title;
+            if (images) return images.find(img => img.title == `File:${title} b.jpg`).title;
+            else return null;
         })
         .then(imageFileName => {
-            return getFileURL(imageFileName);
+            if (imageFileName) return getFileURL(imageFileName);
+            else return null;
         });
 }
 
@@ -40,6 +51,7 @@ async function getAbstract(name) {
         .then(response => {
             if (!response.ok)
                 throw Error(response.statusText);
+
 
             return response.json();
         });

@@ -17,6 +17,13 @@ class Digimon {
     }
 }
 
+class DigimonPreview {
+    constructor(name, image) {
+        this.name = name;
+        this.image = image;
+    }
+}
+
 class Skill {
     constructor(name, description, id) {
         this.name = name;
@@ -25,4 +32,4 @@ class Skill {
     }
 }
 
-export { Digimon, Skill };
+export { Digimon, DigimonPreview, Skill };

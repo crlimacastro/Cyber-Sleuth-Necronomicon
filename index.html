@@ -16,55 +16,58 @@
     <!-- Load the following for BootstrapVueIcons support -->
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
 
+    <!-- Webfonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Orbitron&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./styles/index-styles.css">
+    <link rel="stylesheet" href="./styles/digimon-selected.css">
     <script src="src/loader.js" type="module"></script>
 </head>
 
 <body>
     <div id="app">
-        <div class="myheader">
-            <h1 class="display-5">{{title}}</h1>
-            <!-- <p class="lead text-muted">In this example we are hitting our random joke web service located at: https://people.rit.edu/~acjvks/330/spring-2018/php-web-services/get-a-joke.php.
-            </p>
-            <p class="text-muted">Because we are using the Fetch API, we can download ordinary JSON, rather than JSON-P.
-            </p>
-            <p class="text-muted">But to do this with Fetch, we needed to first handle the CORS issue by setting the
-                <code>Access-Control-Allow-Origin</code> header on banjo.</p> -->
-        </div>
+        <header>
+            <h1 id="title" class="display-5">{{title}}</h1>
+        </header>
 
-        <div class="container">
-            <div class="row search-row">
-                <div class="col-md-12">
-                    <input class="form-control" placeholder="This input does nothing for now" v-model.trim="searchTerm">
-                    <button class="btn btn-outline-success" type="submit" @click="search">Search</button>
+        <section id="controls">
+            <div id="search-controls">
+                <input class="form-control" placeholder="Search by name" v-model.trim="searchTerm">
+                <button class="btn btn-outline-success" type="submit" @click="search(searchTerm)">Search</button>
+            </div>
+
+            <div id="list-controls">
+                <b-form-select v-model="listAmount" :options="listAmountOptions"></b-form-select>
+                <button class="btn btn-outline-success" type="submit" @click="list">List</button>
+            </div>
+        </section>
+
+        <section id="results-area" class="col-md-12">
+            <div id="preloader-container" v-if="searching">
+                <img id="preloader" src="./media/preloader.gif">
+            </div>
+
+            <div id="search-results" v-if="searchResult != null">
+                <digimon-selected-display :name="searchResult.name" :stage="searchResult.stage" :imgsrc="searchResult.image" :type="searchResult.type" :attribute="searchResult.attribute" :skillname="searchResult.skill.name" :skilldescription="searchResult.skill.description"
+                    :abstract="searchResult.abstract" :wikiurl="searchResult.url" :digivolvesto="searchResult.digivolvesTo" :degeneratesto="searchResult.degeneratesTo">
+                </digimon-selected-display>
+            </div>
+
+            <div id="list-results" v-if="listResult.length > 0">
+                <div id="pagination">
+                    <!-- <b-pagination-nav v-model="currentPage" :total-rows="totalListResults" :per-page="listAmount" first-text="First" prev-text="Prev" next-text="Next" last-text="Last"></b-pagination-nav> -->
+                    <p>Page: ({{listPaging.currentPage}}/{{listPaging.totalPages}})</p>
+                    <button class="btn btn-outline-success" type="submit" @click="reduceOffset">Previous</button>
+
+                    <button class="btn btn-outline-success" type="submit" @click="increaseOffset">Next</button>
                 </div>
-                <div class="col-md-12">
-                    <button class="btn btn-outline-success" type="submit" @click="list">List</button>
-                </div>
-            </div>
-        </div>
 
-        <div class="row results-row">
-            <div class="col-md-12">
-                <div id="resultsContainer"></div>
+                <digimon-card-container :digimons="listResult"></digimon-card-container>
             </div>
-        </div>
-
-        <div class="row list-row">
-            <div class="col-md-12">
-                <!-- <small-digimon-display v-for="digimon in listResult" v-bind:digimon="digimon"></small-digimon-display> -->
-            </div>
-        </div>
-
-        <div class="row digimon-row">
-            <div class="col-md-12">
-                <!-- <digimon-display v-bind:digimon="searchResult"></digimon-display> -->
-            </div>
-        </div>
-        <!-- end row -->
-        <!-- </div> -->
-        <!-- end container -->
-        <!-- <joke-footer-2 v-bind:year="copyrightYear" v-bind:name="copyrightName"></joke-footer-2> -->
-        <!-- end #app -->
+        </section>
+    </div>
 </body>
 
 </html>
