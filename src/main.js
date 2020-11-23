@@ -131,10 +131,8 @@ function initVue() {
                         digimonPreviews.push(new DigimonPreview(digimon.name, image));
                     }
                 }
-                console.log(digimonPreviews);
+
                 this.listResult = digimonPreviews;
-
-
 
                 // End search
                 this.searching = false;
