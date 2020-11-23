@@ -29,7 +29,7 @@
 <body>
     <div id="app">
         <header>
-            <h1 id="title" class="display-5">{{title}}</h1>
+            <h1 id="title" class="display-5">Cyber Sleuth's Necronomicon</h1>
         </header>
 
         <section id="controls">
@@ -45,17 +45,18 @@
         </section>
 
         <section id="results-area" class="col-md-12">
-            <div id="preloader-container" v-if="searching">
+            <div id="preloader-container" v-if="appState == appStates.searching">
                 <img id="preloader" src="./media/preloader.gif">
             </div>
 
-            <div id="search-results" v-if="searchResult != null">
-                <digimon-selected-display :name="searchResult.name" :stage="searchResult.stage" :imgsrc="searchResult.image" :type="searchResult.type" :attribute="searchResult.attribute" :skillname="searchResult.skill.name" :skilldescription="searchResult.skill.description"
+            <div id="search-results" v-if="appState == appStates.search">
+                <digimon-selected-display v-if="searchResult" :name="searchResult.name" :stage="searchResult.stage" :imgsrc="searchResult.image" :type="searchResult.type" :attribute="searchResult.attribute" :skillname="searchResult.skill.name" :skilldescription="searchResult.skill.description"
                     :abstract="searchResult.abstract" :wikiurl="searchResult.url" :digivolvesto="searchResult.digivolvesTo" :degeneratesto="searchResult.degeneratesTo">
                 </digimon-selected-display>
+                <p v-if="!searchResult">No search results found</p>
             </div>
 
-            <div id="list-results" v-if="listResult.length > 0">
+            <div id="list-results" v-if="appState == appStates.list && listResult.length > 0">
                 <div id="pagination">
                     <!-- <b-pagination-nav v-model="currentPage" :total-rows="totalListResults" :per-page="listAmount" first-text="First" prev-text="Prev" next-text="Next" last-text="Last"></b-pagination-nav> -->
                     <p>Page: ({{listPaging.currentPage}}/{{listPaging.totalPages}})</p>

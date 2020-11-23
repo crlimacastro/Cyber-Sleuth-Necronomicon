@@ -48,8 +48,9 @@
 
 /* #digimon-selected-wiki-link {} */
 
-
-/* #digimon-selected-arrays {} */
+#digimon-selected-arrays {
+    margin: 1rem;
+}
 
 #digimon-selected-degenerations .digimon-card {
     max-width: 8rem;

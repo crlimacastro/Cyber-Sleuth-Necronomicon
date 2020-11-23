@@ -16,7 +16,12 @@ function initVue() {
     app = new Vue({
         el: '#app',
         data: {
-            title: "Cyber Sleuth's Necronomicon",
+            appStates: {
+                searching: 0,
+                search: 1,
+                list: 2,
+            },
+            appState: 0,
             searchTerm: "",
             searchResult: null,
             listResult: [],
@@ -49,64 +54,68 @@ function initVue() {
                 this.searchResult = null;
 
                 // Start search
-                this.searching = true;
+                this.appState = this.appStates.searching;
 
                 // Get Digimon Cyber Sleuth API info
                 let digiInfo = await digiApiInterface.search(cleanName).then(json => { return json; });
-                digiInfo.name = toTitleCase(digiInfo.name);
 
-                // Transform skill field from an id to a Skill object
-                let skillObj = await digiApiInterface.getSkill(digiInfo.skill).then(skill => { return skill; });
-                digiInfo.skill = new Skill(skillObj.name, skillObj.description, skillObj._id);
-                digiInfo.skill.name = toTitleCase(digiInfo.skill.name);
+                // If digimon found
+                if (digiInfo) {
+                    digiInfo.name = toTitleCase(digiInfo.name);
 
-                // Transform digivolution/degeneration arrays into arrays of digimon
-                let digimonPreviews = [];
-                if (digiInfo.digivolvesTo) {
-                    for (const digimonName of digiInfo.digivolvesTo) {
-                        let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                        if (image) {
-                            image = getHttpsToHttp(image);
-                            digimonPreviews.push(new DigimonPreview(digimonName, image));
+                    // Transform skill field from an id to a Skill object
+                    let skillObj = await digiApiInterface.getSkill(digiInfo.skill).then(skill => { return skill; });
+                    digiInfo.skill = new Skill(skillObj.name, skillObj.description, skillObj._id);
+                    digiInfo.skill.name = toTitleCase(digiInfo.skill.name);
+
+                    // Transform digivolution/degeneration arrays into arrays of digimon
+                    let digimonPreviews = [];
+                    if (digiInfo.digivolvesTo) {
+                        for (const digimonName of digiInfo.digivolvesTo) {
+                            let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
+                            if (image) {
+                                image = getHttpsToHttp(image);
+                                digimonPreviews.push(new DigimonPreview(digimonName, image));
+                            }
                         }
                     }
-                }
 
-                digiInfo.digivolvesTo = digimonPreviews;
+                    digiInfo.digivolvesTo = digimonPreviews;
 
-                digimonPreviews = [];
-                if (digiInfo.degeneratesTo) {
-                    for (const digimonName of digiInfo.degeneratesTo) {
-                        let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                        if (image) {
-                            image = getHttpsToHttp(image);
-                            digimonPreviews.push(new DigimonPreview(digimonName, image));
+                    digimonPreviews = [];
+                    if (digiInfo.degeneratesTo) {
+                        for (const digimonName of digiInfo.degeneratesTo) {
+                            let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
+                            if (image) {
+                                image = getHttpsToHttp(image);
+                                digimonPreviews.push(new DigimonPreview(digimonName, image));
+                            }
                         }
                     }
+                    digiInfo.degeneratesTo = digimonPreviews;
+
+                    // Get MediaWiki API info
+                    let image = await wikiApiInterface.getImageURL(cleanName).then(url => { return url; });
+                    let abstractObj = await wikiApiInterface.getAbstract(cleanName).then(json => { return json; });
+                    let firstItem = getFirstItem(abstractObj);
+
+                    let abstract = firstItem.abstract;
+                    let cleanAbstract = abstract.replace("Gallery", "") + "...";
+                    let url = abstractObj.basepath + firstItem.url;
+
+                    let wikiInfo = {
+                        image: getHttpsToHttp(image),
+                        abstract: cleanAbstract,
+                        url: url
+                    };
+
+                    let digimon = new Digimon(digiInfo, wikiInfo);
+
+                    this.searchResult = digimon;
                 }
-                digiInfo.degeneratesTo = digimonPreviews;
-
-                // Get MediaWiki API info
-                let image = await wikiApiInterface.getImageURL(cleanName).then(url => { return url; });
-                let abstractObj = await wikiApiInterface.getAbstract(cleanName).then(json => { return json; });
-                let firstItem = getFirstItem(abstractObj);
-
-                let abstract = firstItem.abstract;
-                let cleanAbstract = abstract.replace("Gallery", "") + "...";
-                let url = abstractObj.basepath + firstItem.url;
-
-                let wikiInfo = {
-                    image: getHttpsToHttp(image),
-                    abstract: cleanAbstract,
-                    url: url
-                };
-
-                let digimon = new Digimon(digiInfo, wikiInfo);
-
-                this.searchResult = digimon;
 
                 // End search
-                this.searching = false;
+                this.appState = this.appStates.search;
             },
             list() {
                 this.listOffset = 0;
@@ -120,7 +129,7 @@ function initVue() {
                 this.listResult = [];
 
                 // Start search
-                this.searching = true;
+                this.appState = this.appStates.searching;
 
                 // Get all list results
                 let listObj = await digiApiInterface.list(amount, offset).then(arr => { return arr; });
@@ -140,7 +149,7 @@ function initVue() {
                 this.listResult = digimonPreviews;
 
                 // End search
-                this.searching = false;
+                this.appState = this.appStates.list;
             },
             reduceOffset() {
                 if (this.listOffset == 0) return;
