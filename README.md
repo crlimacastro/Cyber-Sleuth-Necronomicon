@@ -71,7 +71,7 @@ TODO
 
 #### Embedded Fonts
 
-[Ubuntu](https://fonts.google.com/specimen/Ubuntu) by Dalton Maag
+[Orbitron](https://fonts.google.com/specimen/Orbitron) by Matt McInerney
 
 [Open Sans](https://fonts.google.com/specimen/Open+Sans) by Steve Matteson
 
@@ -103,7 +103,15 @@ TODO
 
 ## Citations
 
-TODO
+```javascript
+// Helper function. Turns first letter of every word in string to uppercase
+// https://stackoverflow.com/questions/4878756/how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
+function toTitleCase(str) {
+    return str.replace(/\w\S*/g, txt => {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+```
 
 ------------------------------------
 
@@ -114,3 +122,4 @@ TODO
 | 11/12/20 | Created repo. Initial setup                                                                  |
 | 11/20/20 | Got both API's working and retrieving data                                                   |
 | 11/21/20 | Created interfaces for easily working with APIs. Created search and list all functionalities |
+| 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing        |
