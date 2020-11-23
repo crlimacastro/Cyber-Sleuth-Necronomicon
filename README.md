@@ -127,3 +127,4 @@ function toTitleCase(str) {
 | 11/20/20 | Got both API's working and retrieving data                                                   |
 | 11/21/20 | Created interfaces for easily working with APIs. Created search and list all functionalities |
 | 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing        |
+| 11/23/20 | Added state machine for app and polished for project checkpoint |
