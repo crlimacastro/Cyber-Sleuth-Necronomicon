@@ -69,6 +69,10 @@ TODO
 
 ### C. Media
 
+[Preloader](https://icons8.com/preloaders/) at [Icons8.com](https://icons8.com/)
+
+[Favicon](https://www.deviantart.com/wooded-wolf/art/Digimon-Adventure-Digivice-373796580) by [Wooded-Wolf](https://www.deviantart.com/wooded-wolf) at [DeviantArt.com](https://www.deviantart.com/)
+
 #### Embedded Fonts
 
 [Orbitron](https://fonts.google.com/specimen/Orbitron) by Matt McInerney
