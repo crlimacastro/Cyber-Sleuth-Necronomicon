@@ -37,11 +37,11 @@ function initComponents(app) {
                 </div>
 
                 <div id="digimon-selected-arrays">
-                    <div id="digimon-selected-degenerations">
+                    <div id="digimon-selected-degenerations" v-if="degeneratesto.length > 0">
                         <h3>Degenerates To</h3>
                         <digimon-card-container :digimons="degeneratesto"></digimon-card-container>
                     </div>
-                    <div id="digimon-selected-digivolutions">
+                    <div id="digimon-selected-digivolutions" v-if="digivolvesto.length > 0">
                         <h3>Digivolves To</h3>
                         <digimon-card-container :digimons="digivolvesto"></digimon-card-container>
                     </div>

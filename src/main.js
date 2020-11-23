@@ -62,21 +62,26 @@ function initVue() {
 
                 // Transform digivolution/degeneration arrays into arrays of digimon
                 let digimonPreviews = [];
-                for (const digimonName of digiInfo.digivolvesTo) {
-                    let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                    if (image) {
-                        image = getHttpsToHttp(image);
-                        digimonPreviews.push(new DigimonPreview(digimonName, image));
+                if (digiInfo.digivolvesTo) {
+                    for (const digimonName of digiInfo.digivolvesTo) {
+                        let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
+                        if (image) {
+                            image = getHttpsToHttp(image);
+                            digimonPreviews.push(new DigimonPreview(digimonName, image));
+                        }
                     }
                 }
+
                 digiInfo.digivolvesTo = digimonPreviews;
 
                 digimonPreviews = [];
-                for (const digimonName of digiInfo.degeneratesTo) {
-                    let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                    if (image) {
-                        image = getHttpsToHttp(image);
-                        digimonPreviews.push(new DigimonPreview(digimonName, image));
+                if (digiInfo.degeneratesTo) {
+                    for (const digimonName of digiInfo.degeneratesTo) {
+                        let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
+                        if (image) {
+                            image = getHttpsToHttp(image);
+                            digimonPreviews.push(new DigimonPreview(digimonName, image));
+                        }
                     }
                 }
                 digiInfo.degeneratesTo = digimonPreviews;
