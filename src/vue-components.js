@@ -69,7 +69,7 @@ function initComponents(app) {
     Vue.component('digimon-card-container', {
         props: ['digimons'],
         template: `<div id="digimon-card-container">
-            <digimon-card v-for="digimon in digimons" :name="digimon.name" :imgsrc="digimon.image"></digimon-card>
+            <digimon-card v-for="digimon in digimons" v-bind:key="digimon.id" :name="digimon.name" :imgsrc="digimon.image"></digimon-card>
         </div>`
     });
 }

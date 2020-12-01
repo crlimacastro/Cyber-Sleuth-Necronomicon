@@ -33,8 +33,7 @@ function initVue() {
                 { value: 10, text: "10" },
                 { value: 25, text: "20" }
             ],
-            listOffset: 0,
-            searching: false
+            listOffset: 0
         },
         created() {
             this.list();
@@ -74,7 +73,7 @@ function initVue() {
                         for (const digimonName of digiInfo.digivolvesTo) {
                             let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
                             if (image) {
-                                image = getHttpsToHttp(image);
+                                image = image;
                                 digimonPreviews.push(new DigimonPreview(digimonName, image));
                             }
                         }
@@ -87,7 +86,7 @@ function initVue() {
                         for (const digimonName of digiInfo.degeneratesTo) {
                             let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
                             if (image) {
-                                image = getHttpsToHttp(image);
+                                image = image;
                                 digimonPreviews.push(new DigimonPreview(digimonName, image));
                             }
                         }
@@ -104,7 +103,7 @@ function initVue() {
                     let url = abstractObj.basepath + firstItem.url;
 
                     let wikiInfo = {
-                        image: getHttpsToHttp(image),
+                        image: image,
                         abstract: cleanAbstract,
                         url: url
                     };
@@ -141,7 +140,7 @@ function initVue() {
                 for (const digimon of digimons) {
                     let image = await wikiApiInterface.getImageURL(digimon.name).then(url => { return url; });
                     if (image) {
-                        image = getHttpsToHttp(image);
+                        image = image;
                         digimonPreviews.push(new DigimonPreview(digimon.name, image));
                     }
                 }
