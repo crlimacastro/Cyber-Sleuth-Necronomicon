@@ -1,31 +1,46 @@
-import * as digiApiInterface from "./digiApiInterface.js";
-import * as wikiApiInterface from "./wikiApiInterface.js";
+import * as digiApiInterface from "./interfaces/digiApiInterface.js";
+import * as wikiApiInterface from "./interfaces/wikiApiInterface.js";
 import * as classes from "./classes.js";
+import * as utils from "./utils.js";
 
-let Digimon = classes.Digimon;
-let DigimonPreview = classes.DigimonPreview;
-let Skill = classes.Skill;
+// Classes
+const Digimon = classes.Digimon;
+const DigimonPreview = classes.DigimonPreview;
+const Skill = classes.Skill;
 
-let app;
+// Local storage
+const localStoragePrefix = "crl3554-digimonCyberSleuthSite-";
+
+const searchTermKey = localStoragePrefix + "searchTerm";
+let storedSearchTerm;
+
+const appStateKey = localStoragePrefix + "appState";
+let storedAppState;
+
+// Vue App
+let vueApp;
 
 function init() {
+    initLocalStorage();
     initVue();
 }
 
 function initVue() {
-    app = new Vue({
+    vueApp = new Vue({
         el: '#app',
         data: {
+            // App State
             appStates: {
                 searching: 0,
                 search: 1,
                 list: 2,
             },
-            appState: 0,
-            searchTerm: "",
+            appState: storedAppState ? storedAppState : 0,
+            // Searching
+            searchTerm: storedSearchTerm ? storedSearchTerm : "",
             searchResult: null,
+            // Listing
             listResult: [],
-            currentPage: 1,
             totalListResults: 0,
             listAmount: 5,
             listAmountOptions: [
@@ -36,15 +51,28 @@ function initVue() {
             listOffset: 0
         },
         created() {
-            this.list();
+            switch (this.appState) {
+                case this.appStates.search:
+                    this.search(this.searchTerm);
+                    break;
+                case this.appStates.list:
+                    this.list();
+                    break;
+                default:
+                    this.list();
+                    break;
+            }
         },
         methods: {
-            async search(name) {
+            async search(searchTerm) {
                 // Exit early if nothing was typed
-                if (!name.trim()) return;
+                if (!searchTerm.trim()) return;
 
                 // Clean the search term
-                let cleanName = name.toLowerCase();
+                let cleanSearchTerm = searchTerm.toLowerCase();
+
+                // Save search term to local storage
+                localStorage.setItem(searchTermKey, cleanSearchTerm);
 
                 // Clear list
                 this.listResult = [];
@@ -56,26 +84,20 @@ function initVue() {
                 this.appState = this.appStates.searching;
 
                 // Get Digimon Cyber Sleuth API info
-                let digiInfo = await digiApiInterface.search(cleanName).then(json => { return json; });
+                let digiInfo = await digiApiInterface.search(cleanSearchTerm).then(json => { return json; });
 
                 // If digimon found
                 if (digiInfo) {
-                    digiInfo.name = toTitleCase(digiInfo.name);
-
                     // Transform skill field from an id to a Skill object
                     let skillObj = await digiApiInterface.getSkill(digiInfo.skill).then(skill => { return skill; });
                     digiInfo.skill = new Skill(skillObj.name, skillObj.description, skillObj._id);
-                    digiInfo.skill.name = toTitleCase(digiInfo.skill.name);
 
                     // Transform digivolution/degeneration arrays into arrays of digimon
                     let digimonPreviews = [];
                     if (digiInfo.digivolvesTo) {
                         for (const digimonName of digiInfo.digivolvesTo) {
                             let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                            if (image) {
-                                image = image;
-                                digimonPreviews.push(new DigimonPreview(digimonName, image));
-                            }
+                            digimonPreviews.push(new DigimonPreview(digimonName, image));
                         }
                     }
 
@@ -94,8 +116,8 @@ function initVue() {
                     digiInfo.degeneratesTo = digimonPreviews;
 
                     // Get MediaWiki API info
-                    let image = await wikiApiInterface.getImageURL(cleanName).then(url => { return url; });
-                    let abstractObj = await wikiApiInterface.getAbstract(cleanName).then(json => { return json; });
+                    let image = await wikiApiInterface.getImageURL(digiInfo.name).then(url => { return url; });
+                    let abstractObj = await wikiApiInterface.getAbstract(digiInfo.name).then(json => { return json; });
                     let firstItem = getFirstItem(abstractObj);
 
                     let abstract = firstItem.abstract;
@@ -115,6 +137,9 @@ function initVue() {
 
                 // End search
                 this.appState = this.appStates.search;
+
+                // Save app state to local storage
+                localStorage.setItem(appStateKey, this.appState);
             },
             list() {
                 this.listOffset = 0;
@@ -149,6 +174,9 @@ function initVue() {
 
                 // End search
                 this.appState = this.appStates.list;
+
+                // Save app state to local storage
+                localStorage.setItem(appStateKey, this.appState);
             },
             reduceOffset() {
                 if (this.listOffset == 0) return;
@@ -172,7 +200,7 @@ function initVue() {
             }
         },
         computed: {
-            listPaging: function() {
+            listPaging: function () {
                 return {
                     currentPage: parseInt((this.listOffset / this.listAmount)) + 1,
                     totalPages: parseInt(this.totalListResults / this.listAmount)
@@ -182,27 +210,17 @@ function initVue() {
     });
 }
 
+function initLocalStorage() {
+    storedSearchTerm = localStorage.getItem(searchTermKey);
+    storedAppState = Number(localStorage.getItem(appStateKey));
+}
+
 // Private helper function
 // Returns the first item in an abstract object
 function getFirstItem(json) {
     let items = json.items;
-    let firstElement = Object.keys(items)[0];
-    let firstItem = items[firstElement];
+    let firstItem = utils.getFirstValue(items);
     return firstItem;
 }
 
-// Helper function. Turns first letter of every word in string to uppercase
-// https://stackoverflow.com/questions/4878756/how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, txt => {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
-
-// Temporary helper method to turn safe urls to unsafe ones
-// Ask prof. how to deal with safe images not loading
-function getHttpsToHttp(url) {
-    return url.replace("https", "http");
-}
-
-export { init, app };
+export { init, vueApp as app };

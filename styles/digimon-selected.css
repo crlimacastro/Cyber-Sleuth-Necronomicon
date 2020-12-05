@@ -38,8 +38,15 @@
     flex-flow: column;
 }
 
-
 /* #digimon-table {} */
+
+#digimon-selected-type-icon {
+    width: 32px;
+}
+
+#digimon-selected-attribute-icon {
+    width: 32px;
+}
 
 #digimon-selected-abtract {
     max-width: 26rem;

@@ -36,7 +36,7 @@
 
         <section id="controls">
             <div id="search-controls">
-                <input class="form-control" placeholder="Search by name" v-model.trim="searchTerm">
+                <input class="form-control" placeholder="Search by name" @keyup.enter="search(searchTerm)" v-model.trim="searchTerm">
                 <button class="btn btn-outline-success" type="submit" @click="search(searchTerm)">Search</button>
             </div>
 

@@ -121,10 +121,12 @@ function toTitleCase(str) {
 
 ## Log
 
-|   Date   | Description                                                                                  |
-|:--------:|----------------------------------------------------------------------------------------------|
-| 11/12/20 | Created repo. Initial setup                                                                  |
-| 11/20/20 | Got both API's working and retrieving data                                                   |
-| 11/21/20 | Created interfaces for easily working with APIs. Created search and list all functionalities |
-| 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing        |
-| 11/23/20 | Added state machine for app and polished for project checkpoint |
+|   Date   | Description                                                                                                         |
+|:--------:|---------------------------------------------------------------------------------------------------------------------|
+| 11/12/20 | Created repo. Initial setup                                                                                         |
+| 11/20/20 | Got both API's working and retrieving data                                                                          |
+| 11/21/20 | Created interfaces for easily working with APIs. Created search and list all functionalities                        |
+| 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing                               |
+| 11/23/20 | Added state machine for app and polished for project checkpoint                                                     |
+| 12/4/20  | Fixed images not showing up error. Implemented local storage. Added type and attribute icons. Added search on Enter |
+| 12/5/20  |                                                                                                                     |

@@ -1,27 +1,73 @@
-function initComponents(app) {
+function initComponents(vueApp) {
     Vue.component('digimon-table', {
         props: ['type', 'attribute', 'skillname', 'skilldescription'],
         template: `<table id="digimon-table" class="table">
                 <tr>
                     <td>Type</td>
-                    <td>{{type}}</td>
+                    <td><img :src=typeImgURL(type) alt="" id="digimon-selected-type-icon" v-if="typeImgURL(type)"> {{type}}</td>
                 </tr>
                 <tr>
                     <td>Attribute</td>
-                    <td>{{attribute}}</td>
+                    <td><img :src=attributteImgURL(attribute) alt="" id="digimon-selected-attribute-icon" v-if="attributteImgURL(attribute)"> {{attribute}}</td>
                 </tr>
                 <tr>
                     <td>Skill</td>
                     <td>{{skillname}}: {{skilldescription}}</td>
                 </tr>
-            </table>`
+            </table>`,
+        methods: {
+            typeImgURL: function (typeString) {
+                let baseUrl = "./media/types/";
+
+                switch (typeString) {
+                    case "Data":
+                        return baseUrl + "data.png";
+                    case "Free":
+                        return baseUrl + "free.png";
+                    case "Vaccine":
+                        return baseUrl + "vaccine.png";
+                    case "Virus":
+                        return baseUrl + "virus.png";
+                    default:
+                        return undefined;
+                }
+            },
+            attributteImgURL: function (attributeString) {
+                let baseUrl = "./media/attributes/";
+
+                switch (attributeString) {
+                    case "Dark":
+                        return baseUrl + "dark.png";
+                    case "Earth":
+                        return baseUrl + "earth.png";
+                    case "Electric":
+                        return baseUrl + "electric.png";
+                    case "Fire":
+                        return baseUrl + "fire.png";
+                    case "Fire":
+                        return baseUrl + "fire.png";
+                    case "Light":
+                        return baseUrl + "light.png";
+                    case "Neutral":
+                        return baseUrl + "neutral.png";
+                    case "Plant":
+                        return baseUrl + "plant.png";
+                    case "Water":
+                        return baseUrl + "water.png";
+                    case "Wind":
+                        return baseUrl + "wind.png";
+                    default:
+                        return undefined;
+                }
+            }
+        }
     });
 
     Vue.component('digimon-selected-display', {
         props: ['name', 'stage', 'imgsrc', 'type', 'attribute', 'skillname', 'skilldescription', 'abstract', 'wikiurl', 'digivolvesto', 'degeneratesto'],
         template: `<div id="digimon-selected-display">
                 <div id="digimon-selected-header">
-                    <h2 id="digimon-selected-name">{{name}}</h2>
+                    <h2 id="digimon-selected-name">{{toTitleCase(name)}}</h2>
                     <h3 id="digimon-selected-stage">{{stage}}</h3>
                 </div>
 
@@ -30,7 +76,7 @@ function initComponents(app) {
                 </div>
 
                 <div id="digimon-selected-info">
-                    <digimon-table v-bind:type="type" v-bind:attribute="attribute" v-bind:skillname="skillname" v-bind:skilldescription="skilldescription">
+                    <digimon-table :type="type" :attribute="attribute" :skillname="toTitleCase(skillname)" :skilldescription="skilldescription">
                     </digimon-table>
                     <p id="digimon-selected-abtract">{{abstract}}</p>
                     <a id="digimon-selected-wiki-link" :href="wikiurl">Visit Digimon Wiki Page</a>
@@ -46,7 +92,16 @@ function initComponents(app) {
                         <digimon-card-container :digimons="digivolvesto"></digimon-card-container>
                     </div>
                 </div>
-            </div>`
+            </div>`,
+        methods: {
+            // Helper function. Turns first letter of every word in string to uppercase
+            // https://stackoverflow.com/questions/4878756/how-to-capitalize-first-letter-of-each-word-like-a-2-word-city
+            toTitleCase: function (str) {
+                return str.replace(/\w\S*/g, txt => {
+                    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+                });
+            }
+        }
     });
 
     Vue.component('digimon-card', {
@@ -60,8 +115,8 @@ function initComponents(app) {
                 class="mb-2 digimon-card">
             </b-card>`,
         methods: {
-            search: function(name) {
-                app.search(name);
+            search: function (name) {
+                vueApp.search(name);
             }
         }
     });
@@ -69,7 +124,7 @@ function initComponents(app) {
     Vue.component('digimon-card-container', {
         props: ['digimons'],
         template: `<div id="digimon-card-container">
-            <digimon-card v-for="digimon in digimons" v-bind:key="digimon.id" :name="digimon.name" :imgsrc="digimon.image"></digimon-card>
+            <digimon-card v-for="digimon in digimons" :key="digimon.id" :name="digimon.name" :imgsrc="digimon.image"></digimon-card>
         </div>`
     });
 }
