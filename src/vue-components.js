@@ -64,6 +64,11 @@ function initComponents(vueApp) {
     });
 
     Vue.component('digimon-selected-display', {
+        data: function() {
+            return {
+                placeholderImgURL: vueApp.placeholderImgURL
+            };
+        },
         props: ['name', 'stage', 'imgsrc', 'type', 'attribute', 'skillname', 'skilldescription', 'abstract', 'wikiurl', 'digivolvesto', 'degeneratesto'],
         template: `<div id="digimon-selected-display">
                 <div id="digimon-selected-header">
@@ -72,14 +77,14 @@ function initComponents(vueApp) {
                 </div>
 
                 <div id="digimon-selected-image-container">
-                    <img id="digimon-selected-image" :src="imgsrc">
+                    <img id="digimon-selected-image" :src="imgsrc ? imgsrc : placeholderImgURL">
                 </div>
 
                 <div id="digimon-selected-info">
                     <digimon-table :type="type" :attribute="attribute" :skillname="toTitleCase(skillname)" :skilldescription="skilldescription">
                     </digimon-table>
-                    <p id="digimon-selected-abtract">{{abstract}}</p>
-                    <a id="digimon-selected-wiki-link" :href="wikiurl">Visit Digimon Wiki Page</a>
+                    <p id="digimon-selected-abtract" v-if="abstract">{{abstract}}</p>
+                    <a id="digimon-selected-wiki-link" :href="wikiurl" v-if="wikiurl">Visit Digimon Wiki Page</a>
                 </div>
 
                 <div id="digimon-selected-arrays">
@@ -105,12 +110,17 @@ function initComponents(vueApp) {
     });
 
     Vue.component('digimon-card', {
+        data: function() {
+            return {
+                placeholderImgURL: vueApp.placeholderImgURL
+            };
+        },
         props: ['name', 'imgsrc'],
         template: `<b-card
                 type="submit"
                 @click="search(name)"
                 :title="name"
-                :img-src="imgsrc"
+                :img-src="imgsrc ? imgsrc : placeholderImgURL"
                 img-top
                 class="mb-2 digimon-card">
             </b-card>`,

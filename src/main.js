@@ -36,19 +36,58 @@ function initVue() {
                 list: 2,
             },
             appState: storedAppState ? storedAppState : 0,
+            placeholderImgURL: "./media/placeholder.png",
             // Searching
             searchTerm: storedSearchTerm ? storedSearchTerm : "",
             searchResult: null,
             // Listing
             listResult: [],
             totalListResults: 0,
+            // Listing-Filters
+            // List-Amount
             listAmount: 5,
             listAmountOptions: [
                 { value: 5, text: "5" },
                 { value: 10, text: "10" },
                 { value: 25, text: "20" }
             ],
-            listOffset: 0
+            listOffset: 0,
+            // Stage
+            stageFilter: "",
+            stageOptions: [
+                { value: "", text: " " },
+                { value: "Baby", text: "Baby" },
+                { value: "In-Training", text: "In-Training" },
+                { value: "Rookie", text: "Rookie" },
+                { value: "Champion", text: "Champion" },
+                { value: "Ultimate", text: "Ultimate" },
+                { value: "Mega", text: "Mega" },
+                { value: "Armor", text: "Armor" },
+                { value: "Ultra", text: "Ultra" }
+            ],
+            // Type
+            typeFilter: "",
+            typeOptions: [
+                { value: "", text: " " },
+                { value: "Free", text: "Free" },
+                { value: "Data", text: "Data" },
+                { value: "Vaccine", text: "Vaccine" },
+                { value: "Virus", text: "Virus" }
+            ],
+            // Attribute
+            attributeFilter: "",
+            attributeOptions: [
+                { value: "", text: " " },
+                { value: "Neutral", text: "Neutral" },
+                { value: "Fire", text: "Fire" },
+                { value: "Plant", text: "Plant" },
+                { value: "Water", text: "Water" },
+                { value: "Electric", text: "Electric" },
+                { value: "Wind", text: "Wind" },
+                { value: "Earth", text: "Earth" },
+                { value: "Light", text: "Light" },
+                { value: "Dark", text: "Dark" }
+            ]
         },
         created() {
             switch (this.appState) {
@@ -107,27 +146,19 @@ function initVue() {
                     if (digiInfo.degeneratesTo) {
                         for (const digimonName of digiInfo.degeneratesTo) {
                             let image = await wikiApiInterface.getImageURL(digimonName).then(url => { return url; });
-                            if (image) {
-                                image = image;
-                                digimonPreviews.push(new DigimonPreview(digimonName, image));
-                            }
+                            digimonPreviews.push(new DigimonPreview(digimonName, image));
                         }
                     }
                     digiInfo.degeneratesTo = digimonPreviews;
 
                     // Get MediaWiki API info
                     let image = await wikiApiInterface.getImageURL(digiInfo.name).then(url => { return url; });
-                    let abstractObj = await wikiApiInterface.getAbstract(digiInfo.name).then(json => { return json; });
-                    let firstItem = getFirstItem(abstractObj);
-
-                    let abstract = firstItem.abstract;
-                    let cleanAbstract = abstract.replace("Gallery", "") + "...";
-                    let url = abstractObj.basepath + firstItem.url;
+                    let wikiData = await wikiApiInterface.getWikiData(digiInfo.name).then(json => { return json; });
 
                     let wikiInfo = {
                         image: image,
-                        abstract: cleanAbstract,
-                        url: url
+                        abstract: wikiData.abstract,
+                        url: wikiData.url
                     };
 
                     let digimon = new Digimon(digiInfo, wikiInfo);
@@ -141,11 +172,13 @@ function initVue() {
                 // Save app state to local storage
                 localStorage.setItem(appStateKey, this.appState);
             },
-            list() {
+            resetOffset() {
                 this.listOffset = 0;
-                this.getList(this.listAmount, this.listOffset);
             },
-            async getList(amount, offset) {
+            list() {
+                this.getList(this.listAmount, this.listOffset, this.stageFilter, this.typeFilter, this.attributeFilter);
+            },
+            async getList(amount, offset, stage, type, attribute) {
                 // Clear search
                 this.searchResult = null;
 
@@ -156,7 +189,7 @@ function initVue() {
                 this.appState = this.appStates.searching;
 
                 // Get all list results
-                let listObj = await digiApiInterface.list(amount, offset).then(arr => { return arr; });
+                let listObj = await digiApiInterface.list(amount, offset, stage, type, attribute).then(arr => { return arr; });
                 let digimons = listObj.arr;
                 this.totalListResults = listObj.total;
 
@@ -164,10 +197,7 @@ function initVue() {
                 let digimonPreviews = [];
                 for (const digimon of digimons) {
                     let image = await wikiApiInterface.getImageURL(digimon.name).then(url => { return url; });
-                    if (image) {
-                        image = image;
-                        digimonPreviews.push(new DigimonPreview(digimon.name, image));
-                    }
+                    digimonPreviews.push(new DigimonPreview(digimon.name, image));
                 }
 
                 this.listResult = digimonPreviews;
@@ -186,24 +216,24 @@ function initVue() {
                 else
                     this.listOffset -= this.listAmount;
 
-                this.getList(this.listAmount, this.listOffset);
+                this.list();
             },
             increaseOffset() {
-                if (this.listOffset == this.totalListResults - this.listAmount) return;
+                if (this.listOffset >= this.totalListResults - this.listAmount) return;
 
                 if (this.listOffset + this.listAmount > this.totalListResults)
-                    this.listOffset = this.totalListResults - this.listAmount;
+                    this.listOffset = Math.max(this.totalListResults - this.listAmount, 0);
                 else
                     this.listOffset += this.listAmount;
 
-                this.getList(this.listAmount, this.listOffset);
+                this.list();
             }
         },
         computed: {
             listPaging: function () {
                 return {
-                    currentPage: parseInt((this.listOffset / this.listAmount)) + 1,
-                    totalPages: parseInt(this.totalListResults / this.listAmount)
+                    currentPage: Math.ceil((this.listOffset / this.listAmount)) + 1,
+                    totalPages: Math.ceil(this.totalListResults / this.listAmount)
                 };
             }
         }
@@ -213,14 +243,6 @@ function initVue() {
 function initLocalStorage() {
     storedSearchTerm = localStorage.getItem(searchTermKey);
     storedAppState = Number(localStorage.getItem(appStateKey));
-}
-
-// Private helper function
-// Returns the first item in an abstract object
-function getFirstItem(json) {
-    let items = json.items;
-    let firstItem = utils.getFirstValue(items);
-    return firstItem;
 }
 
 export { init, vueApp as app };

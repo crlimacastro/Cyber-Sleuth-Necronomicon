@@ -33,7 +33,9 @@ switch ($action) {
 		}
 		$name = urlencode($name);
 
-		$url .= "/api.php?action=query&prop=imageinfo&iiprop=timestamp|user|url&iiurlwidth=320&titles={$name}&format=json";
+		// URL that asks for scaled image
+		// $url .= "/api.php?action=query&prop=imageinfo&iiprop=timestamp|user|url&iiurlwidth=320&titles={$name}&format=json";
+		$url .= "/api.php?action=query&prop=imageinfo&iiprop=timestamp|user|url&titles={$name}&format=json";
 		break;
 	case 'abstract':
 		$url .= "/api/v1/Articles/Details?abstract=500";

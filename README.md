@@ -93,7 +93,11 @@ TODO
 
 ### Wishlist of Features
 
-TODO
+If I had more time I would have worked on better pagination controls to sift through list results easier.
+If the database used by the Digimon Cyber Sleuth API was bigger it would definitely be a necessary option 
+as list results could easily come up with hundreds of pages. This is the first time I used Bootstrap and 
+the first time I had used Vue for a project of this size, however, so I had a hard time learning how to code 
+more advanced controls and styling options.
 
 ------------------------------------
 
@@ -129,4 +133,4 @@ function toTitleCase(str) {
 | 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing                               |
 | 11/23/20 | Added state machine for app and polished for project checkpoint                                                     |
 | 12/4/20  | Fixed images not showing up error. Implemented local storage. Added type and attribute icons. Added search on Enter |
-| 12/5/20  |                                                                                                                     |
+| 12/5/20  | Added filters to listing action. Added placeholder image. Tweaked searching to find more images                     |

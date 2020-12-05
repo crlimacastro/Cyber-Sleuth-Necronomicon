@@ -35,9 +35,7 @@ h4 {
     display: flex;
 }
 
-#list-controls {
-    display: flex;
-}
+/* #list-controls {} */
 
 #results-area {
     padding: 0;
@@ -56,19 +54,14 @@ h4 {
 
 #preloader {
     display: block;
-    position: fixed;
-    left: 50%;
-    top: 50%;
     width: 10rem;
     height: 1.4rem;
-    margin-top: -0.7rem;
-    margin-left: -5rem;
+    margin: 1rem auto;
 }
 
 #search-results {
     margin: 2rem;
 }
-
 
 /* #list-results {} */
 
