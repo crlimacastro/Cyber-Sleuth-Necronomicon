@@ -40,6 +40,10 @@ async function getImageURL(name) {
         .then(imageFileName => {
             if (imageFileName) return getFileURL(imageFileName);
             else return null;
+        })
+        .then(imageURL => {
+            if (imageURL) return cleanImgURL(imageURL);
+            else return null;
         });
 }
 
@@ -57,7 +61,7 @@ async function getAbstract(name) {
         });
 }
 
-// Private function that returns 
+// Private function that returns file url
 async function getFileURL(fileName) {
     let url = baseUrl + `?action=file&name=${encodeURI(fileName)}`;
 
@@ -81,6 +85,12 @@ function getFirstPage(json) {
     let firstElement = Object.keys(pages)[0];
     let firstPage = pages[firstElement];
     return firstPage;
+}
+
+// Private function that cleans image url to
+// one that img element can display
+function cleanImgURL(url) {
+    return url.substring(0, url.indexOf(".jpg") + 4);
 }
 
 export { getImageURL, getAbstract };
