@@ -113,7 +113,10 @@ function initVue() {
                 { value: "Dark", text: "Dark" }
             ]
         },
-        created() {
+        async created() {
+            // Make sure JSONs are loaded
+            await wikiApiInterface.initInterfaceAsync();
+
             switch (this.appState) {
                 case this.appStates.search:
                     this.search(storedSearchedDigimon);
@@ -146,8 +149,10 @@ function initVue() {
                 // If digimon found
                 if (digiInfo) {
                     // Transform skill field from an id to a Skill object
-                    let skillObj = await digiApiInterface.getSkill(digiInfo.skill).then(skill => { return skill; });
-                    digiInfo.skill = new Skill(skillObj.name, skillObj.description, skillObj._id);
+                    if (digiInfo.skill) {
+                        let skillObj = await digiApiInterface.getSkill(digiInfo.skill).then(skill => { return skill; });
+                        digiInfo.skill = new Skill(skillObj.name, skillObj.description, skillObj._id);
+                    }
 
                     // Transform digivolution/degeneration arrays into arrays of digimon
                     let digimonPreviews = [];
@@ -184,7 +189,7 @@ function initVue() {
                     this.searchResult = digimon;
 
                     // Save to local storage
-                localStorage.setItem(searchedDigimonKey, digimon.name);
+                    localStorage.setItem(searchedDigimonKey, digimon.name);
                 }
 
                 // End search
@@ -228,6 +233,7 @@ function initVue() {
 
                 // Save to local storage
                 localStorage.setItem(appStateKey, this.appState);
+                localStorage.setItem(listAmountKey, this.listAmount);
                 localStorage.setItem(stageFilterKey, this.stageFilter);
                 localStorage.setItem(typeFilterKey, this.typeFilter);
                 localStorage.setItem(attributeFilterKey, this.attributeFilter);

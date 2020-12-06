@@ -83,7 +83,7 @@ function initComponents(vueApp) {
                 </div>
 
                 <div id="digimon-selected-info">
-                    <digimon-table :type="type" :attribute="attribute" :skillname="toTitleCase(skillname)" :skilldescription="skilldescription">
+                    <digimon-table :type="type" :attribute="attribute" :skillname="skillname ? toTitleCase(skillname) : 'None'" :skilldescription="skilldescription ? skilldescription : 'N/A'">
                     </digimon-table>
                     <p id="digimon-selected-abtract" v-if="abstract">{{abstract}}</p>
                     <a id="digimon-selected-wiki-link" :href="wikiurl" v-if="wikiurl">Visit Digimon Wiki Page</a>

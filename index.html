@@ -39,7 +39,7 @@
             <div id="search-controls">
                 <input class="form-control" placeholder="Search by name" @keyup.enter="search(searchTerm); saveSearchTerm();"
                     v-model.trim="searchTerm">
-                <button class="btn btn-outline-success" type="submit" @click="search(searchTerm); saveSearchTerm();">Search</button>
+                <button class="btn btn-outline-primary" type="submit" @click="search(searchTerm); saveSearchTerm();">Search</button>
             </div>
 
             <div id="list-controls">
@@ -56,8 +56,8 @@
                 <b-form-group id="attribute-group" label="Attribute" label-for="attribute-select">
                     <b-form-select v-model="attributeFilter" :options="attributeOptions" id="attribute-select"></b-form-select>
                 </b-form-group>
-                <button class="btn btn-outline-success" type="submit" @click="clearFilters">Clear Filters</button>
-                <button class="btn btn-outline-success" type="submit" @click="resetOffset(); list();">List</button>
+                <button class="btn btn-outline-secondary" type="submit" @click="clearFilters">Clear Filters</button>
+                <button class="btn btn-outline-primary" type="submit" @click="resetOffset(); list();">List</button>
             </div>
         </section>
 
@@ -69,7 +69,7 @@
             <div id="search-results" v-if="appState == appStates.search">
                 <digimon-selected-display v-if="searchResult" :name="searchResult.name" :stage="searchResult.stage"
                     :imgsrc="searchResult.image" :type="searchResult.type" :attribute="searchResult.attribute"
-                    :skillname="searchResult.skill.name" :skilldescription="searchResult.skill.description"
+                    :skillname="searchResult?.skill?.name" :skilldescription="searchResult?.skill?.description"
                     :abstract="searchResult.abstract" :wikiurl="searchResult.url"
                     :digivolvesto="searchResult.digivolvesTo" :degeneratesto="searchResult.degeneratesTo">
                 </digimon-selected-display>
@@ -80,9 +80,9 @@
                 <div id="list-results-container" v-if="listResult.length > 0">
                     <div id="pagination">
                         <p>Page: ({{pagingData.currentPage}}/{{pagingData.totalPages}})</p>
-                        <button class="btn btn-outline-success" type="submit" @click="reduceOffset">Previous</button>
+                        <button class="btn btn-outline-primary" type="submit" @click="reduceOffset">Previous</button>
 
-                        <button class="btn btn-outline-success" type="submit" @click="increaseOffset">Next</button>
+                        <button class="btn btn-outline-primary" type="submit" @click="increaseOffset">Next</button>
                     </div>
 
                     <digimon-card-container :digimons="listResult"></digimon-card-container>

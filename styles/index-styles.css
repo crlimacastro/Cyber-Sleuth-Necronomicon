@@ -6,16 +6,13 @@ body {
     padding: 1rem;
 }
 
-p,
-a {
+p, a {
     font-family: 'Open Sans', sans-serif;
 }
 
-h1,
-h2,
-h3,
-h4 {
+h1, h2, h3, h4 {
     font-family: 'Orbitron', sans-serif;
+    font-weight: bold;
 }
 
 #title {
@@ -85,11 +82,34 @@ h4 {
 }
 
 .digimon-card {
-    max-width: 16rem;
+    min-width: 12rem;
+    width: 12rem;
     margin: 1rem;
     text-align: center;
+    position: relative;
 }
 
 .digimon-card:hover {
     background-color: rgba(0, 0, 0, 0.164);
+}
+
+.digimon-card .card-body {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%;
+}
+
+.digimon-card img {
+    background-color: white;
+    width: 100%;
+}
+
+.digimon-card .card-title {
+    min-width: 100%;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+
+    font-size: 1rem;
+    white-space: nowrap;
 }

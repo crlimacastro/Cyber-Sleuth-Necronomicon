@@ -54,13 +54,14 @@ switch ($action) {
 $opts = array('http' =>
 array(
 	'method'  => 'GET',
+	'follow_location' => 1,
 ));
 $context = stream_context_create($opts);
 
 // Call the web service
 $result = file_get_contents($url, false, $context);
 
-// Echo results 
+// // Echo results 
 header('content-type:application/json'); // tell the requestor that this is JSON
 header("Access-Control-Allow-Origin: *"); // turn on CORS for that shout-client.html can use this service
 
