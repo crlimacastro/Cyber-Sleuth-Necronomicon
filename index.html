@@ -62,7 +62,7 @@
                     <b-form-select v-model="attributeFilter" :options="attributeOptions" id="attribute-select">
                     </b-form-select>
                 </b-form-group>
-                <button class="btn btn-outline-secondary" type="submit" @click="clearFilters">Clear Filters</button>
+                <button class="btn btn-outline-secondary" type="submit" @click="clearLocalStorage">Clear</button>
                 <button class="btn btn-outline-primary" type="submit" @click="resetOffset(); list();">List</button>
             </div>
         </div>

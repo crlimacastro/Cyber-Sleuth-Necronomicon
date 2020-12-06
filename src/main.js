@@ -261,13 +261,14 @@ function initVue() {
 
                 this.list();
             },
-            clearFilters() {
+            clearLocalStorage() {
+                localStorage.clear();
+
+                this.searchTerm = "";
+                this.listAmount = 5;
                 this.stageFilter = "";
-                localStorage.setItem(stageFilterKey, this.stageFilter);
                 this.typeFilter = "";
-                localStorage.setItem(typeFilterKey, this.typeFilter);
                 this.attributeFilter = "";
-                localStorage.setItem(attributeFilterKey, this.attributeFilter);
             }
         },
         computed: {

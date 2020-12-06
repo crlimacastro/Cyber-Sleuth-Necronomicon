@@ -3,7 +3,7 @@ Digivolution compendium for Digimon Story Cyber Sleuth
 
 Link to Application: <https://people.rit.edu/crl3554/330/project3/>
 
-Video Reel: TODO
+Video Reel: <https://youtu.be/zdQyrk-0CDA>
 
 My portfolio: <https://crlimacastro.github.io/>
 
@@ -61,7 +61,7 @@ Thanks to the styling magic of Bootstrap Vue, the page has a very clean layout. 
 
 #### Engagement
 
-For fans of the game and the series, this should be an engaging app. There are barely any interactable digivolution line charts on the web (mostly because these are not standardized. I am using only one of the games' interpretation of these digivolution lines). In order to explore around and see which Digimons can turn into which and examine how interconnected the web of digivolutions is you would normally have to boot up one of the games. Sometimes even looking at them through the games is restrictive as,usually, they do not let you see far ahead and (as they are RPGs) you have to grind for hours to evolve your Digimon and see what is ahead. This app is meant to be an accessible and readily available map to these complicated charts.
+For fans of the game and the series, this should be an engaging app. There are barely any interactable digivolution line charts on the web (mostly because these are not standardized. I am using only one of the games' interpretation of these digivolution lines). In order to explore around and see which Digimons can turn into which and examine how interconnected the web of digivolutions is you would normally have to boot up one of the games. Sometimes even looking at them through the games is restrictive as, usually, they do not let you see far ahead and (as they are RPGs) you have to grind for hours to evolve your Digimon and see what is ahead. This app is meant to be an accessible and readily available map to these complicated charts.
 
 For players of the game (especially those who decide to play competitively in PvP matches) there is the added benefit of being able to easily look up a Digimon's Type, Attribute, and Skill in order to help create a balanced and effective team composition.
 
@@ -71,13 +71,13 @@ The site is responsive and perfectly usable in mobile devices. The Bootstrap fra
 
 The application makes sure that the experience is as seamless as possible. I have minimized searching times in several ways to not hinder the user's flow as they are paging through the site.
 
-The first time the site loads, a few Digimon are listed automatically so that the user knows exactly what the website is about and how it works. Other quality-of-life features have been coded in such as being able to search by pressing "Enter" on the text input control (removing the need to grab the mouse and press the "Search" button every time). Searches and the general state of the application is saved through the LocalStorage API. The site remembers where the user left off and will load back to that state when the user comes back to it.
+The first time the site loads, a few Digimon are listed automatically so that the user knows exactly what the website is about and how it works. Other quality-of-life features have been coded in such as being able to search by pressing "Enter" on the text input control (removing the need to grab the mouse and press the "Search" button every time). Searches and the general state of the application are saved through the LocalStorage API. The site remembers where the user left off and will load back to that state when the user comes back to it.
 
 ### C. Media
 
 [Preloader](https://icons8.com/preloaders/) at [Icons8.com](https://icons8.com/)
 
-[Favicon](https://www.deviantart.com/wooded-wolf/art/Digimon-Adventure-Digivice-373796580) by [Wooded-Wolf](https://www.deviantart.com/wooded-wolf) at [DeviantArt.com](https://www.deviantart.com/)
+[Favicon and Placeholder](https://www.deviantart.com/wooded-wolf/art/Digimon-Adventure-Digivice-373796580) by [Wooded-Wolf](https://www.deviantart.com/wooded-wolf) at [DeviantArt.com](https://www.deviantart.com/)
 
 #### Embedded Fonts
 
@@ -105,7 +105,7 @@ The biggest thing to scare me was how long it took me to figure out how to fetch
 
 In the end, I didn't give up on the MediaWiki API though and through a lot of experimenting and cracking at its walls little by little, I finally did it! And now the visual aspects of the entire project are in safe hands (there was still a lot of work to do refining the searching algorithm even after I was able to fetch images, however).
 
-Everything else about the project went smoothly however. As I stated earlier, the parts of the project I felt confident about, I was able to finish and have them ready very early on in development and that gave me a very good foundation and, more importantly, it provided me time to get the important functionalities mentioned above working.
+Everything else about the project went smoothly. As I stated earlier, the parts of the project I felt confident about I was able to finish and have them ready very early on in development and that gave me a very good foundation and, more importantly, it provided me time to get the important functionalities mentioned above working.
 
 ### Wishlist of Features
 
