@@ -133,4 +133,4 @@ function toTitleCase(str) {
 | 11/22/20 | Tweaked list functionality to only serve limited amounts. Made app visually appealing                               |
 | 11/23/20 | Added state machine for app and polished for project checkpoint                                                     |
 | 12/4/20  | Fixed images not showing up error. Implemented local storage. Added type and attribute icons. Added search on Enter |
-| 12/5/20  | Added filters to listing action. Added placeholder image. Tweaked searching to find more images                     |
+| 12/5/20  | Added filters to listing action. Added placeholder image. Tweaked searching to find more images. Cleaned abstracts  |

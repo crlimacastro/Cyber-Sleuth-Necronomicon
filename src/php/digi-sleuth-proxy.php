@@ -17,7 +17,7 @@ switch ($action) {
 
 		// Define name to search
 		if (array_key_exists('name', $_GET)) {
-			$url .= "/name/" . $_GET['name'];
+			$url .= "/name/" . rawurlencode($_GET['name']);
 		}
 		break;
 	case 'skill':
@@ -57,5 +57,6 @@ $result = file_get_contents($url, false, $context);
 // Echo results 
 header('content-type:application/json'); // tell the requestor that this is JSON
 header("Access-Control-Allow-Origin: *"); // turn on CORS for that shout-client.html can use this service
+
 echo $result;
 ?>

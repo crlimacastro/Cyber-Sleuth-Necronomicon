@@ -1,7 +1,6 @@
 import * as digiApiInterface from "./interfaces/digiApiInterface.js";
 import * as wikiApiInterface from "./interfaces/wikiApiInterface.js";
 import * as classes from "./classes.js";
-import * as utils from "./utils.js";
 
 // Classes
 const Digimon = classes.Digimon;
@@ -11,11 +10,26 @@ const Skill = classes.Skill;
 // Local storage
 const localStoragePrefix = "crl3554-digimonCyberSleuthSite-";
 
+const appStateKey = localStoragePrefix + "appState";
+let storedAppState;
+
 const searchTermKey = localStoragePrefix + "searchTerm";
 let storedSearchTerm;
 
-const appStateKey = localStoragePrefix + "appState";
-let storedAppState;
+const searchedDigimonKey = localStoragePrefix + "searchedDigimon";
+let storedSearchedDigimon;
+
+const listAmountKey = localStoragePrefix + "listAmount";
+let storedListAmount;
+
+const stageFilterKey = localStoragePrefix + "stageFilter";
+let storedStageFilter;
+
+const typeFilterKey = localStoragePrefix + "typeFilter";
+let storedTypeFilter;
+
+const attributeFilterKey = localStoragePrefix + "attributeFilter";
+let storedAttributeFilter;
 
 // Vue App
 let vueApp;
@@ -23,6 +37,16 @@ let vueApp;
 function init() {
     initLocalStorage();
     initVue();
+}
+
+function initLocalStorage() {
+    storedAppState = Number(localStorage.getItem(appStateKey));
+    storedSearchTerm = localStorage.getItem(searchTermKey);
+    storedSearchedDigimon = localStorage.getItem(searchedDigimonKey);
+    storedListAmount = Number(localStorage.getItem(listAmountKey));
+    storedStageFilter = localStorage.getItem(stageFilterKey);
+    storedTypeFilter = localStorage.getItem(typeFilterKey);
+    storedAttributeFilter = localStorage.getItem(attributeFilterKey);
 }
 
 function initVue() {
@@ -45,7 +69,7 @@ function initVue() {
             totalListResults: 0,
             // Listing-Filters
             // List-Amount
-            listAmount: 5,
+            listAmount: storedListAmount ? storedListAmount : 5,
             listAmountOptions: [
                 { value: 5, text: "5" },
                 { value: 10, text: "10" },
@@ -53,7 +77,7 @@ function initVue() {
             ],
             listOffset: 0,
             // Stage
-            stageFilter: "",
+            stageFilter: storedStageFilter ? storedStageFilter : "",
             stageOptions: [
                 { value: "", text: " " },
                 { value: "Baby", text: "Baby" },
@@ -66,7 +90,7 @@ function initVue() {
                 { value: "Ultra", text: "Ultra" }
             ],
             // Type
-            typeFilter: "",
+            typeFilter: storedTypeFilter ? storedTypeFilter : "",
             typeOptions: [
                 { value: "", text: " " },
                 { value: "Free", text: "Free" },
@@ -75,7 +99,7 @@ function initVue() {
                 { value: "Virus", text: "Virus" }
             ],
             // Attribute
-            attributeFilter: "",
+            attributeFilter: storedAttributeFilter ? storedAttributeFilter : "",
             attributeOptions: [
                 { value: "", text: " " },
                 { value: "Neutral", text: "Neutral" },
@@ -92,7 +116,7 @@ function initVue() {
         created() {
             switch (this.appState) {
                 case this.appStates.search:
-                    this.search(this.searchTerm);
+                    this.search(storedSearchedDigimon);
                     break;
                 case this.appStates.list:
                     this.list();
@@ -105,13 +129,7 @@ function initVue() {
         methods: {
             async search(searchTerm) {
                 // Exit early if nothing was typed
-                if (!searchTerm.trim()) return;
-
-                // Clean the search term
-                let cleanSearchTerm = searchTerm.toLowerCase();
-
-                // Save search term to local storage
-                localStorage.setItem(searchTermKey, cleanSearchTerm);
+                if (!searchTerm || !searchTerm.trim()) return;
 
                 // Clear list
                 this.listResult = [];
@@ -123,7 +141,7 @@ function initVue() {
                 this.appState = this.appStates.searching;
 
                 // Get Digimon Cyber Sleuth API info
-                let digiInfo = await digiApiInterface.search(cleanSearchTerm).then(json => { return json; });
+                let digiInfo = await digiApiInterface.search(searchTerm).then(json => { return json; });
 
                 // If digimon found
                 if (digiInfo) {
@@ -164,16 +182,19 @@ function initVue() {
                     let digimon = new Digimon(digiInfo, wikiInfo);
 
                     this.searchResult = digimon;
+
+                    // Save to local storage
+                localStorage.setItem(searchedDigimonKey, digimon.name);
                 }
 
                 // End search
                 this.appState = this.appStates.search;
 
-                // Save app state to local storage
+                // Save to local storage
                 localStorage.setItem(appStateKey, this.appState);
             },
-            resetOffset() {
-                this.listOffset = 0;
+            saveSearchTerm() {
+                localStorage.setItem(searchTermKey, this.searchTerm);
             },
             list() {
                 this.getList(this.listAmount, this.listOffset, this.stageFilter, this.typeFilter, this.attributeFilter);
@@ -205,8 +226,14 @@ function initVue() {
                 // End search
                 this.appState = this.appStates.list;
 
-                // Save app state to local storage
+                // Save to local storage
                 localStorage.setItem(appStateKey, this.appState);
+                localStorage.setItem(stageFilterKey, this.stageFilter);
+                localStorage.setItem(typeFilterKey, this.typeFilter);
+                localStorage.setItem(attributeFilterKey, this.attributeFilter);
+            },
+            resetOffset() {
+                this.listOffset = 0;
             },
             reduceOffset() {
                 if (this.listOffset == 0) return;
@@ -227,10 +254,18 @@ function initVue() {
                     this.listOffset += this.listAmount;
 
                 this.list();
+            },
+            clearFilters() {
+                this.stageFilter = "";
+                localStorage.setItem(stageFilterKey, this.stageFilter);
+                this.typeFilter = "";
+                localStorage.setItem(typeFilterKey, this.typeFilter);
+                this.attributeFilter = "";
+                localStorage.setItem(attributeFilterKey, this.attributeFilter);
             }
         },
         computed: {
-            listPaging: function () {
+            pagingData: function () {
                 return {
                     currentPage: Math.ceil((this.listOffset / this.listAmount)) + 1,
                     totalPages: Math.ceil(this.totalListResults / this.listAmount)
@@ -238,11 +273,6 @@ function initVue() {
             }
         }
     });
-}
-
-function initLocalStorage() {
-    storedSearchTerm = localStorage.getItem(searchTermKey);
-    storedAppState = Number(localStorage.getItem(appStateKey));
 }
 
 export { init, vueApp as app };
