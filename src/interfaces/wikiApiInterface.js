@@ -2,8 +2,6 @@ import * as utils from "../utils.js";
 
 const baseUrl = "https://people.rit.edu/crl3554/330/project3/src/php/mediawiki-proxy.php";
 
-let apiData;
-
 // Alternative names a digimon might have
 let alternativeNames;
 // Possible abbreviations in digimon name

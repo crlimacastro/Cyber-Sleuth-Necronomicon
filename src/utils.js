@@ -93,5 +93,4 @@ async function getJsonAsync(url) {
 }
 //#endregion
 
-
 export { toTitleCase, capitalizeFirstLetterOfWords, toUpperCamelCase, removeSpaces, capitalizeIndex, getFirstValue, getJson, getJsonAsync };
