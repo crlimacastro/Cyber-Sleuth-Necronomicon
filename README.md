@@ -1,9 +1,7 @@
-# IGME-330-Project3
+# Cyber Sleuth's Necronomicon
 Digivolution compendium for Digimon Story Cyber Sleuth
 
 Link to Application: <https://people.rit.edu/crl3554/330/project3/>
-
-Video Reel: <https://youtu.be/zdQyrk-0CDA>
 
 My portfolio: <https://crlimacastro.github.io/>
 
@@ -16,8 +14,6 @@ My portfolio: <https://crlimacastro.github.io/>
 [Requirements](#Requirements)
 
 [What went right & wrong](#What-went-right-&-what-went-wrong)
-
-[Self Assessment](#Self-Assessment)
 
 [Citations](#Citations)
 
@@ -45,9 +41,7 @@ MediaWiki API - https://digimon.fandom.com/api.php
 
 Used to reliably obtain data such as images of a digimon from its wiki Fandom page.
 
-Used to get links to that digimon's article for the user to easily navigate there. 
-
-4) I will be working solo.
+Used to get links to that digimon's article for the user to easily navigate there.
 
 ------------------------------------
 
@@ -116,14 +110,6 @@ the first time I had used Vue for a project of this size, however, so I had a ha
 more advanced controls and styling options.
 
 Another thing I would like to work on in the future is optimizing the page and the searching even further. Currently, the page elements load after everything is prepared. However, in the future I would definitely like to create a system where all of the images and data are being fetched in parallel asynchronously and everything is loaded in as it comes.
-
-------------------------------------
-
-## Self-Assessment
-
-I am really proud of how polished this project came out. I am especially proud of having braved the wilderness that is the MediaWiki API and having reigned it in to do exactly what I wanted. It is an incredibly underdocumented one but one I knew had exactly what I needed. And now that I know how to use it I can do so again in the future as many times as I want and reliably find images from it. On top of using two entirely new API's I also took on Vue for the first time for such a big project and learning Bootstrap for the first time ever. There were a lot of firsts but I managed to handle it well and the project benefitted greatly from each and every one of these frameworks and interfaces.
-
-**Grade** - 100%
 
 ------------------------------------
 
